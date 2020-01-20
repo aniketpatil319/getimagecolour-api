@@ -1,14 +1,4 @@
  <h1 align="center"> getimagecolour-api </h1>
-getimagecolour-api allows a client to send an image and required co-ordinates to retrieve the colour name of that pixel.
-
-### Used Packages:
-- Flask
-- Numpy
-- Urllib3
-- Base64
-- PIL
-- IO
-- Webcolors
 
 ### What does the API do?
 getimagecolour-api allows a client to send an image and required co-ordinates to retrieve the colour name of that pixel. 

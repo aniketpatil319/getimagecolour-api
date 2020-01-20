@@ -1,5 +1,4 @@
 from flask import Flask,request,jsonify
-#import cv2
 import numpy as np
 import urllib.parse,base64
 from PIL import Image
@@ -30,24 +29,22 @@ def get_colour_name(requested_colour):
 @app.route('/',methods=['POST'])
 def color_detection_center():
     data = request.get_json()
-    image_urlencoded = data['data']
+    image_urlencoded = data['image']
     image_base64 = urllib.parse.unquote(image_urlencoded)
     image_not_in_format = base64.b64decode(image_base64)
     image_in_format = Image.open(io.BytesIO(image_not_in_format))
     a = np.array(image_in_format)
-    color_here = []
-    center_x = round(a.shape[0]/2)
-    center_y = round(a.shape[1]/2)
-    for i in range(center_y-50,center_y+50,10):
-    	for j in range(center_x-50,center_x+50,10):
-    		color_here.append(a[i][j].tolist())
+    center_x = data['height']
+    center_y = data['width']
+    print(a.shape)
+    if center_x > a.shape[0] and center_y > a.shape[1]:
+        return 'Error in pixel value entered',400
+    else:
+        requested_colour = a[center_x][center_y]
+        actual_name, closest_name = get_colour_name(requested_colour)
 
-    color_here_final = max(color_here,key=color_here.count)
-    requested_colour = color_here_final#[::-1]
-    actual_name, closest_name = get_colour_name(requested_colour)
-
-    #print ("Actual colour name:", actual_name, ", closest colour name:", closest_name)
-    return closest_name
+        #print ("Actual colour name:", actual_name, ", closest colour name:", closest_name)
+        return closest_name,200
     
     
 if __name__ == '__main__':
